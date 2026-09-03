@@ -1,0 +1,6 @@
+# Firebase local deploy cache
+.firebase/
+*.log
+
+# OS cruft
+.DS_Store
