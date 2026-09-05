@@ -173,7 +173,9 @@
   .pillar-watermark.align-right { right: 0.5rem; }
   .pillar-watermark.align-left { left: 0.5rem; }
 
-  .gallery-frame { position: relative; overflow: hidden; border-radius: 10px; background: var(--brownsec); box-shadow: 0 8px 20px rgba(62, 39, 35, 0.16); cursor: pointer; }
+  .gallery-frame { position: relative; overflow: hidden; border-radius: 10px; background: var(--brownsec); box-shadow: 0 8px 20px rgba(62, 39, 35, 0.16); cursor: pointer; opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .gallery-frame.is-visible { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) { .gallery-frame { opacity: 1; transform: none; transition: none; } }
   .gallery-frame img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.6s ease; filter: sepia(0.12) saturate(0.95); }
   .gallery-frame:hover img, .gallery-frame:active img { transform: scale(1.08); filter: sepia(0.05) saturate(1.05); }
 
@@ -441,28 +443,28 @@
     </div>
 
     <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 md:gap-4 auto-rows-[120px] md:auto-rows-[200px]" id="galleryGrid">
-      <div class="gallery-frame col-span-2 row-span-2" data-reveal data-caption="Annual Day felicitation with the faculty" tabindex="0" role="button" aria-label="View photo: Annual Day Felicitation">
+      <div class="gallery-frame col-span-2 row-span-2" data-caption="Annual Day felicitation with the faculty" tabindex="0" role="button" aria-label="View photo: Annual Day Felicitation">
         <img src="assets/gallery/photo-01.jpg" alt="Students with teachers at Annual Day felicitation" loading="lazy">
       </div>
-      <div class="gallery-frame" data-reveal data-caption="Classroom moments with our mentors" tabindex="0" role="button" aria-label="View photo: Classroom Moments">
+      <div class="gallery-frame" data-caption="Classroom moments with our mentors" tabindex="0" role="button" aria-label="View photo: Classroom Moments">
         <img src="assets/gallery/photo-02.jpg" alt="A classroom moment with a teacher" loading="lazy">
       </div>
-      <div class="gallery-frame" data-reveal data-caption="House Day cheer with our House Masters" tabindex="0" role="button" aria-label="View photo: House Day Cheer">
+      <div class="gallery-frame" data-caption="House Day cheer with our House Masters" tabindex="0" role="button" aria-label="View photo: House Day Cheer">
         <img src="assets/gallery/photo-03.jpg" alt="Students with House Masters on House Day" loading="lazy">
       </div>
-      <div class="gallery-frame" data-reveal data-caption="On the field with our sports coaches" tabindex="0" role="button" aria-label="View photo: On the Field">
+      <div class="gallery-frame" data-caption="On the field with our sports coaches" tabindex="0" role="button" aria-label="View photo: On the Field">
         <img src="assets/gallery/photo-04.jpg" alt="Students with sports coaches on the field" loading="lazy">
       </div>
-      <div class="gallery-frame" data-reveal data-caption="Lab sessions with our science faculty" tabindex="0" role="button" aria-label="View photo: In the Laboratory">
+      <div class="gallery-frame" data-caption="Lab sessions with our science faculty" tabindex="0" role="button" aria-label="View photo: In the Laboratory">
         <img src="assets/gallery/photo-05.jpg" alt="Students with science faculty in the lab" loading="lazy">
       </div>
-      <div class="gallery-frame col-span-2" data-reveal data-caption="Farewell gratitude to our graduating batch's mentors" tabindex="0" role="button" aria-label="View photo: Farewell Gratitude">
+      <div class="gallery-frame col-span-2" data-caption="Farewell gratitude to our graduating batch's mentors" tabindex="0" role="button" aria-label="View photo: Farewell Gratitude">
         <img src="assets/gallery/photo-06.jpg" alt="Farewell moment with mentors" loading="lazy">
       </div>
-      <div class="gallery-frame" data-reveal data-caption="MUN and journalism mentors guiding delegates" tabindex="0" role="button" aria-label="View photo: MUN Mentorship">
+      <div class="gallery-frame" data-caption="MUN and journalism mentors guiding delegates" tabindex="0" role="button" aria-label="View photo: MUN Mentorship">
         <img src="assets/gallery/photo-07.jpg" alt="Students with MUN faculty advisor" loading="lazy">
       </div>
-      <div class="gallery-frame" data-reveal data-caption="Backstage before a school production, with our arts faculty" tabindex="0" role="button" aria-label="View photo: Behind the Curtain">
+      <div class="gallery-frame" data-caption="Backstage before a school production, with our arts faculty" tabindex="0" role="button" aria-label="View photo: Behind the Curtain">
         <img src="assets/gallery/photo-08.jpg" alt="Students backstage with arts faculty" loading="lazy">
       </div>
     </div>
@@ -835,6 +837,17 @@
     startAutoRotate() { this.timer = setTimeout(() => this.show((this.currentIndex + 1) % this.quotes.length, false), 5500); }
   }
   new QuoteCarousel();
+
+  /* ================= GALLERY REVEAL (one-shot, scroll-speed independent) ================= */
+  const galleryRevealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        galleryRevealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.01, rootMargin: '0px 0px -5% 0px' });
+  document.querySelectorAll('.gallery-frame').forEach((el) => galleryRevealObserver.observe(el));
 
   /* ================= GALLERY LIGHTBOX ================= */
   const galleryFrames = Array.from(document.querySelectorAll('.gallery-frame'));
