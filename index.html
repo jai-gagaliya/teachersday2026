@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#6b4423">
 <title>Welham Boys' School — The Architects of Human Potential</title>
 <meta name="description" content="A scroll-driven cinematic film honoring the teachers of Welham Boys' School.">
+<link rel="icon" type="image/png" href="assets/welham-logo.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -286,7 +287,7 @@
       <span class="hero-kicker-line"></span>
     </div>
     <h1 class="letter-reveal font-serif font-bold gold-glow-text text-offwhite leading-[1.05] text-[12vw] md:text-[5.5vw]" id="heroTitle">
-      <span style="animation-delay:0.05s">W</span><span style="animation-delay:0.09s">e</span><span style="animation-delay:0.13s">l</span><span style="animation-delay:0.17s">h</span><span style="animation-delay:0.21s">a</span><span style="animation-delay:0.25s">m</span><span style="animation-delay:0.29s">&nbsp;</span><span style="animation-delay:0.33s">B</span><span style="animation-delay:0.37s">o</span><span style="animation-delay:0.41s">y</span><span style="animation-delay:0.45s">s</span><span style="animation-delay:0.49s">&#8217;</span><span style="animation-delay:0.53s">&nbsp;</span><span style="animation-delay:0.57s">S</span><span style="animation-delay:0.61s">c</span><span style="animation-delay:0.65s">h</span><span style="animation-delay:0.69s">o</span><span style="animation-delay:0.73s">o</span><span style="animation-delay:0.77s">l</span>
+      <span class="whitespace-nowrap"><span style="animation-delay:0.05s">W</span><span style="animation-delay:0.09s">e</span><span style="animation-delay:0.13s">l</span><span style="animation-delay:0.17s">h</span><span style="animation-delay:0.21s">a</span><span style="animation-delay:0.25s">m</span></span> <span class="whitespace-nowrap"><span style="animation-delay:0.33s">B</span><span style="animation-delay:0.37s">o</span><span style="animation-delay:0.41s">y</span><span style="animation-delay:0.45s">s</span><span style="animation-delay:0.49s">&#8217;</span></span> <span class="whitespace-nowrap"><span style="animation-delay:0.57s">S</span><span style="animation-delay:0.61s">c</span><span style="animation-delay:0.65s">h</span><span style="animation-delay:0.69s">o</span><span style="animation-delay:0.73s">o</span><span style="animation-delay:0.77s">l</span></span>
     </h1>
     <p class="font-sans text-base md:text-2xl font-light text-offwhite/90 mt-5 md:mt-6 tracking-wide" id="heroSub">Celebrating Our Inspiring Educators</p>
   </div>
@@ -327,19 +328,19 @@
   <div class="reel-sticky" id="reelSticky">
 
     <div class="reel-shot" data-shot="0">
-      <video muted playsinline preload="auto"><source src="assets/shots/shot-01.mp4?v=2" type="video/mp4"></video>
+      <video muted playsinline preload="metadata"><source src="assets/shots/shot-01.mp4?v=2" type="video/mp4"></video>
       <div class="reel-shot-grade"></div>
     </div>
     <div class="reel-shot" data-shot="1">
-      <video muted playsinline preload="auto"><source src="assets/shots/shot-02.mp4?v=2" type="video/mp4"></video>
+      <video muted playsinline preload="metadata"><source src="assets/shots/shot-02.mp4?v=2" type="video/mp4"></video>
       <div class="reel-shot-grade"></div>
     </div>
     <div class="reel-shot" data-shot="2">
-      <video muted playsinline preload="auto"><source src="assets/shots/shot-03.mp4?v=2" type="video/mp4"></video>
+      <video muted playsinline preload="metadata"><source src="assets/shots/shot-03.mp4?v=2" type="video/mp4"></video>
       <div class="reel-shot-grade"></div>
     </div>
     <div class="reel-shot" data-shot="3">
-      <video muted playsinline preload="auto"><source src="assets/shots/shot-04.mp4?v=2" type="video/mp4"></video>
+      <video muted playsinline preload="metadata"><source src="assets/shots/shot-04.mp4?v=2" type="video/mp4"></video>
       <div class="reel-shot-grade"></div>
     </div>
 
@@ -530,7 +531,7 @@
 <!-- ============ TRIBUTE v3 — FULL-BLEED CINEMATIC CLOSING ============ -->
 <section id="tribute" class="tribute-wrapper">
   <div class="tribute-sticky" id="tributeSticky">
-    <video class="tribute-video" id="tributeVideo" muted playsinline loop preload="auto">
+    <video class="tribute-video" id="tributeVideo" muted playsinline loop preload="metadata">
       <source src="assets/shots/shot-05-tribute.mp4?v=2" type="video/mp4">
     </video>
     <div class="tribute-grade"></div>
@@ -638,6 +639,26 @@
     video.addEventListener('loadedmetadata', () => { reelDurations[i] = video.duration || 0; });
     video.addEventListener('canplay', () => { reelDurations[i] = video.duration || reelDurations[i]; });
   });
+
+  /* ================= DEFERRED VIDEO WARM-UP =================
+     The reel + tribute videos load preload="metadata" only (a few KB each),
+     not preload="auto" — on page load only the hero video should compete for
+     bandwidth. As each section approaches, bump it to preload="auto" and
+     .load() so it has fully buffered by the time scroll-scrubbing reaches it,
+     without every video fighting for the same mobile connection at once. */
+  const warmUpVideo = (video) => {
+    if (!video || video.preload === 'auto') return;
+    video.preload = 'auto';
+    video.load();
+  };
+  const warmUpObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.querySelectorAll('video').forEach(warmUpVideo);
+      warmUpObserver.unobserve(entry.target);
+    });
+  }, { rootMargin: '50% 0px 50% 0px' });
+  if (reelSection) warmUpObserver.observe(reelSection);
 
   const reelState = {
     shotOpacity: new Array(reelShots.length).fill(0),
@@ -753,6 +774,7 @@
 
   /* ================= TRIBUTE — LERP-SMOOTHED SCENE-BASED REVEAL ================= */
   const tributeSection = document.getElementById('tribute');
+  if (tributeSection) warmUpObserver.observe(tributeSection);
   const tributeEls = Array.from(document.querySelectorAll('[data-t-reveal]'));
   const tributeState = tributeEls.map(() => 0);
   const tributeSigRule = document.getElementById('tributeSigRule');
