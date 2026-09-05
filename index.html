@@ -143,9 +143,10 @@
   .reel-shot { position: absolute; inset: 0; opacity: 0; }
   .reel-shot video { width: 100%; height: 100%; object-fit: cover; filter: saturate(0.85) brightness(0.72) sepia(0.1); }
   .reel-shot-grade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(30,15,10,0.35) 0%, rgba(30,15,10,0.15) 45%, rgba(30,15,10,0.75) 100%); }
-  .reel-caption-wrap { position: absolute; inset: 0; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4rem; z-index: 10; }
+  .reel-caption-wrap { position: absolute; inset: 0; display: grid; place-items: end center; padding-bottom: 4rem; z-index: 10; }
   @media (min-width: 768px) { .reel-caption-wrap { padding-bottom: 6rem; } }
   .reel-caption {
+    grid-area: 1 / 1;
     font-family: 'Playfair Display', serif; font-weight: 600; font-style: italic; color: var(--offwhite);
     font-size: clamp(1.6rem, 5vw, 3.2rem); text-align: center; max-width: 900px; padding: 0 1.5rem;
     text-shadow: 0 4px 30px rgba(0,0,0,0.5); opacity: 0; transform: translateY(24px); will-change: opacity, transform;
@@ -175,12 +176,6 @@
   .gallery-frame { position: relative; overflow: hidden; border-radius: 10px; background: var(--brownsec); box-shadow: 0 8px 20px rgba(62, 39, 35, 0.16); cursor: pointer; }
   .gallery-frame img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.6s ease; filter: sepia(0.12) saturate(0.95); }
   .gallery-frame:hover img, .gallery-frame:active img { transform: scale(1.08); filter: sepia(0.05) saturate(1.05); }
-  .gallery-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(62,39,35,0.9) 100%); display: flex; align-items: flex-end; padding: 0.75rem; opacity: 0; transition: opacity 0.4s ease; }
-  @media (max-width: 767px) { .gallery-overlay { opacity: 1; background: linear-gradient(180deg, transparent 55%, rgba(62,39,35,0.85) 100%); } }
-  .gallery-frame:hover .gallery-overlay, .gallery-frame:active .gallery-overlay { opacity: 1; }
-  .gallery-caption { font-family: 'Inter', sans-serif; font-weight: 500; letter-spacing: 0.03em; transform: translateY(10px); transition: transform 0.4s ease; }
-  @media (max-width: 767px) { .gallery-caption { transform: translateY(0); } }
-  .gallery-frame:hover .gallery-caption, .gallery-frame:active .gallery-caption { transform: translateY(0); }
 
   .lightbox-backdrop { position: fixed; inset: 0; background: rgba(30, 15, 10, 0.94); z-index: 200; display: none; align-items: center; justify-content: center; padding: 1.25rem; padding-top: calc(1.25rem + var(--safe-top)); padding-bottom: calc(1.25rem + var(--safe-bottom)); }
   .lightbox-backdrop.open { display: flex; }
@@ -190,7 +185,6 @@
   .lightbox-nav-btn:hover { background: rgba(253,250,243,0.18); }
   .lightbox-nav-btn.prev { left: 0.5rem; } .lightbox-nav-btn.next { right: 0.5rem; }
   @media (min-width: 640px) { .lightbox-nav-btn.prev { left: 1rem; } .lightbox-nav-btn.next { right: 1rem; } }
-  .lightbox-caption-text { font-family: 'Inter', sans-serif; font-weight: 400; letter-spacing: 0.02em; }
 
   .quote-mark-bg { font-family: 'Playfair Display', serif; font-size: clamp(5rem, 16vw, 16rem); line-height: 0.5; color: rgba(107, 68, 35, 0.1); user-select: none; }
   .quote-slide { opacity: 0; position: absolute; inset: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; pointer-events: none; }
@@ -449,35 +443,27 @@
     <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 md:gap-4 auto-rows-[120px] md:auto-rows-[200px]" id="galleryGrid">
       <div class="gallery-frame col-span-2 row-span-2" data-reveal data-caption="Annual Day felicitation with the faculty" tabindex="0" role="button" aria-label="View photo: Annual Day Felicitation">
         <img src="assets/gallery/photo-01.jpg" alt="Students with teachers at Annual Day felicitation" loading="lazy">
-        <div class="gallery-overlay"><span class="gallery-caption text-[11px] md:text-sm text-offwhite">Annual Day Felicitation</span></div>
       </div>
       <div class="gallery-frame" data-reveal data-caption="Classroom moments with our mentors" tabindex="0" role="button" aria-label="View photo: Classroom Moments">
         <img src="assets/gallery/photo-02.jpg" alt="A classroom moment with a teacher" loading="lazy">
-        <div class="gallery-overlay"><span class="gallery-caption text-[11px] text-offwhite">Classroom Moments</span></div>
       </div>
       <div class="gallery-frame" data-reveal data-caption="House Day cheer with our House Masters" tabindex="0" role="button" aria-label="View photo: House Day Cheer">
         <img src="assets/gallery/photo-03.jpg" alt="Students with House Masters on House Day" loading="lazy">
-        <div class="gallery-overlay"><span class="gallery-caption text-[11px] text-offwhite">House Day Cheer</span></div>
       </div>
       <div class="gallery-frame" data-reveal data-caption="On the field with our sports coaches" tabindex="0" role="button" aria-label="View photo: On the Field">
         <img src="assets/gallery/photo-04.jpg" alt="Students with sports coaches on the field" loading="lazy">
-        <div class="gallery-overlay"><span class="gallery-caption text-[11px] text-offwhite">On the Field</span></div>
       </div>
       <div class="gallery-frame" data-reveal data-caption="Lab sessions with our science faculty" tabindex="0" role="button" aria-label="View photo: In the Laboratory">
         <img src="assets/gallery/photo-05.jpg" alt="Students with science faculty in the lab" loading="lazy">
-        <div class="gallery-overlay"><span class="gallery-caption text-[11px] text-offwhite">In the Laboratory</span></div>
       </div>
       <div class="gallery-frame col-span-2" data-reveal data-caption="Farewell gratitude to our graduating batch's mentors" tabindex="0" role="button" aria-label="View photo: Farewell Gratitude">
         <img src="assets/gallery/photo-06.jpg" alt="Farewell moment with mentors" loading="lazy">
-        <div class="gallery-overlay"><span class="gallery-caption text-[11px] md:text-sm text-offwhite">Farewell Gratitude</span></div>
       </div>
       <div class="gallery-frame" data-reveal data-caption="MUN and journalism mentors guiding delegates" tabindex="0" role="button" aria-label="View photo: MUN Mentorship">
         <img src="assets/gallery/photo-07.jpg" alt="Students with MUN faculty advisor" loading="lazy">
-        <div class="gallery-overlay"><span class="gallery-caption text-[11px] text-offwhite">MUN Mentorship</span></div>
       </div>
       <div class="gallery-frame" data-reveal data-caption="Backstage before a school production, with our arts faculty" tabindex="0" role="button" aria-label="View photo: Behind the Curtain">
         <img src="assets/gallery/photo-08.jpg" alt="Students backstage with arts faculty" loading="lazy">
-        <div class="gallery-overlay"><span class="gallery-caption text-[11px] text-offwhite">Behind the Curtain</span></div>
       </div>
     </div>
 
@@ -491,7 +477,6 @@
   <button class="lightbox-nav-btn next" id="lightboxNext" aria-label="Next photo"><i data-lucide="chevron-right" class="w-6 h-6"></i></button>
   <div class="max-w-4xl w-full">
     <img id="lightboxImg" src="" alt="Enlarged gallery photograph" class="w-full max-h-[70vh] md:max-h-[80vh] object-contain rounded-lg mx-auto">
-    <p id="lightboxCaption" class="lightbox-caption-text text-center text-sm text-offwhite/80 mt-4"></p>
   </div>
 </div>
 
@@ -709,15 +694,25 @@
 
   /* ================= LERP-SMOOTHED CONTINUOUS REVEAL (transform + opacity only) ================= */
   const revealEls = Array.from(document.querySelectorAll('[data-reveal]'));
-  const revealState = revealEls.map(() => ({ opacity: 0, ty: 40, scale: 0.98 }));
+  const revealState = revealEls.map(() => ({ opacity: 0, ty: 40, scale: 0.98, peak: 0 }));
 
   const updateReveals = () => {
     const vh = window.innerHeight;
-    revealEls.forEach((el, i) => {
+    /* Read all layout first, then write all styles — interleaving the two forces a
+       synchronous reflow per element (layout thrashing), which was the source of
+       input lag on scroll/click. */
+    const targets = revealEls.map((el) => {
       const rect = el.getBoundingClientRect();
       const center = rect.top + rect.height / 2;
-      const targetProgress = Math.min(Math.max(1 - Math.abs(center - vh * 0.62) / (vh * 0.6), 0), 1);
+      return Math.min(Math.max(1 - Math.abs(center - vh * 0.62) / (vh * 0.6), 0), 1);
+    });
+    revealEls.forEach((el, i) => {
       const state = revealState[i];
+      /* Once an element has revealed, keep it revealed instead of fading back out
+         when scrolled past — a fast mobile flick can jump straight through the
+         narrow reveal band, otherwise leaving content permanently invisible. */
+      state.peak = Math.max(state.peak, targets[i]);
+      const targetProgress = state.peak;
       state.opacity += (targetProgress - state.opacity) * 0.15;
       state.ty += ((1 - targetProgress) * 40 - state.ty) * 0.15;
       state.scale += ((0.98 + targetProgress * 0.02) - state.scale) * 0.15;
@@ -730,11 +725,13 @@
   const parallaxState = parallaxEls.map(() => 0);
   const updateParallax = () => {
     const vh = window.innerHeight;
-    parallaxEls.forEach((el, i) => {
+    const targets = parallaxEls.map((el) => {
       const factor = parseFloat(el.getAttribute('data-parallax')) || 0;
       const rect = el.getBoundingClientRect();
-      const target = (rect.top + rect.height / 2 - vh / 2) * factor;
-      parallaxState[i] += (target - parallaxState[i]) * 0.13;
+      return (rect.top + rect.height / 2 - vh / 2) * factor;
+    });
+    parallaxEls.forEach((el, i) => {
+      parallaxState[i] += (targets[i] - parallaxState[i]) * 0.13;
       el.style.transform = 'translateY(' + parallaxState[i] + 'px)';
     });
   };
@@ -843,7 +840,6 @@
   const galleryFrames = Array.from(document.querySelectorAll('.gallery-frame'));
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightboxImg');
-  const lightboxCaption = document.getElementById('lightboxCaption');
   const lightboxClose = document.getElementById('lightboxClose');
   const lightboxPrev = document.getElementById('lightboxPrev');
   const lightboxNext = document.getElementById('lightboxNext');
@@ -856,7 +852,6 @@
     const img = frame.querySelector('img');
     lightboxImg.src = img.getAttribute('src');
     lightboxImg.alt = img.getAttribute('alt') || '';
-    lightboxCaption.textContent = frame.getAttribute('data-caption') || '';
     lightbox.classList.add('open');
     document.body.classList.add('lightbox-locked');
     lightboxClose.focus();
